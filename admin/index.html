@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Middle East — لوحة التحكم الإدارية السيادية</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #0b0d13;
+      color: #f3f4f6;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #f5e3b5 0%, #d4af37 50%, #aa8022 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gold-border {
+      border-color: rgba(197, 160, 89, 0.35);
+    }
+    .gold-glow {
+      box-shadow: 0 0 25px rgba(197, 160, 89, 0.15);
+    }
+    .card-bg {
+      background-color: rgba(18, 22, 33, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#0b0d13] text-gray-100">
+
+  <!-- TOP APP BAR -->
+  <header class="sticky top-0 z-50 border-b gold-border bg-[#0e111a]/90 backdrop-blur-md px-4 sm:px-8 py-3.5 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a href="/" class="flex items-center gap-2.5 hover:opacity-90 transition-opacity">
+        <img src="/assets/logo-emblem-CeluxJm7.png" alt="Data Middle East" class="h-10 w-10 object-contain drop-shadow-[0_0_10px_rgba(197,160,89,0.4)]">
+        <div>
+          <span class="block text-sm font-black uppercase tracking-wider gold-gradient-text">Data Middle East</span>
+          <span class="block text-[11px] text-[#c5a059] font-mono">Executive Sovereign Portal</span>
+        </div>
+      </a>
+      <span class="mr-3 hidden sm:inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-950/40 px-2.5 py-0.5 text-[11px] text-emerald-400 font-mono">
+        <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        Sovereign Admin: <span id="current-user-display" class="font-bold">admin</span>
+      </span>
+    </div>
+
+    <div class="flex items-center gap-2.5">
+      <a href="/" class="rounded-md border gold-border bg-[#141824] px-3 py-1.5 text-xs text-gray-300 hover:text-white hover:border-[#c5a059] transition-all flex items-center gap-1.5">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+        عرض الموقع العام
+      </a>
+      <button id="open-password-btn" class="rounded-md border border-[#c5a059]/50 bg-[#c5a059]/15 px-3 py-1.5 text-xs text-[#f5e3b5] hover:bg-[#c5a059]/25 transition-all flex items-center gap-1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        تغيير كلمة السر
+      </button>
+      <button id="logout-btn" class="rounded-md border border-red-500/40 bg-red-950/30 px-3 py-1.5 text-xs text-red-400 hover:bg-red-900/50 transition-all">
+        خروج
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-8 space-y-8">
+    
+    <!-- WELCOME & TITLE -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b gold-border pb-6">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-black text-white flex items-center gap-2">
+          <span>لوحة إدارة الشركات والمالية</span>
+          <span class="text-xs font-mono font-normal text-[#c5a059] bg-[#c5a059]/10 border border-[#c5a059]/30 px-2 py-0.5 rounded">v2.4 Private</span>
+        </h1>
+        <p class="text-xs sm:text-sm text-gray-400 mt-1">سجل العقود والمبالغ المستحقة من الشركات وحساب التكاليف وصافي الأرباح التلقائي.</p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="flex items-center rounded-lg border gold-border bg-[#141824] p-1 text-xs font-mono">
+          <button class="curr-btn px-2.5 py-1 rounded bg-[#c5a059] text-black font-bold" data-curr="$">$ USD</button>
+          <button class="curr-btn px-2.5 py-1 rounded text-gray-400 hover:text-white" data-curr="ر.س">ر.س SAR</button>
+          <button class="curr-btn px-2.5 py-1 rounded text-gray-400 hover:text-white" data-curr="د.إ">د.إ AED</button>
+        </div>
+        <button id="add-company-btn" class="rounded-md bg-[#c5a059] px-4 py-2 text-xs font-bold text-black hover:bg-[#e7c77d] transition-all shadow-[0_0_15px_rgba(197,160,89,0.3)] flex items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          إضافة شركة جديدة
+        </button>
+      </div>
+    </div>
+
+    <!-- KPI STATS CARDS -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      
+      <!-- Card 1: Total Companies -->
+      <div class="card-bg rounded-xl border gold-border p-5 relative overflow-hidden gold-glow">
+        <div class="flex items-center justify-between text-gray-400 text-xs mb-2">
+          <span>إجمالي الشركات المسجلة</span>
+          <span class="p-1.5 rounded-lg bg-blue-500/10 text-blue-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>
+          </span>
+        </div>
+        <div class="text-3xl font-black text-white font-mono" id="stat-total-companies">0</div>
+        <div class="text-[11px] text-gray-400 mt-2 flex items-center gap-1 font-mono">
+          <span class="text-emerald-400" id="stat-active-companies">0</span> نشطة في الخدمة
+        </div>
+      </div>
+
+      <!-- Card 2: Total Revenue -->
+      <div class="card-bg rounded-xl border gold-border p-5 relative overflow-hidden gold-glow">
+        <div class="flex items-center justify-between text-gray-400 text-xs mb-2">
+          <span>إجمالي الإيرادات (المجموع المستحق)</span>
+          <span class="p-1.5 rounded-lg bg-amber-500/10 text-[#c5a059]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </span>
+        </div>
+        <div class="text-3xl font-black text-[#f5e3b5] font-mono" id="stat-total-revenue">$0</div>
+        <div class="text-[11px] text-gray-400 mt-2 font-mono">
+          المبالغ المحصلة من عقود الشركات
+        </div>
+      </div>
+
+      <!-- Card 3: Total Costs -->
+      <div class="card-bg rounded-xl border gold-border p-5 relative overflow-hidden gold-glow">
+        <div class="flex items-center justify-between text-gray-400 text-xs mb-2">
+          <span>إجمالي التكاليف والمصروفات</span>
+          <span class="p-1.5 rounded-lg bg-red-500/10 text-red-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 12-7 7-7-7M12 19V5"/></svg>
+          </span>
+        </div>
+        <div class="text-3xl font-black text-red-300 font-mono" id="stat-total-costs">$0</div>
+        <div class="text-[11px] text-gray-400 mt-2 font-mono">
+          سيرفرات وبنية تحتية وتراخيص
+        </div>
+      </div>
+
+      <!-- Card 4: Net Profit -->
+      <div class="card-bg rounded-xl border gold-border p-5 relative overflow-hidden gold-glow">
+        <div class="flex items-center justify-between text-gray-400 text-xs mb-2">
+          <span>صافي الأرباح (Net Profit)</span>
+          <span class="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 7-7 7 7M12 5v14"/></svg>
+          </span>
+        </div>
+        <div class="text-3xl font-black text-emerald-400 font-mono" id="stat-net-profit">$0</div>
+        <div class="text-[11px] text-emerald-400/80 mt-2 font-mono flex items-center justify-between">
+          <span>هامش الربح:</span>
+          <span id="stat-profit-margin" class="font-bold">0%</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- COMPANIES TABLE CARD -->
+    <div class="card-bg rounded-xl border gold-border overflow-hidden shadow-2xl">
+      <div class="p-4 sm:p-6 border-b gold-border flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c5a059" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg>
+          <h2 class="text-lg font-bold text-white">جدول تفاصيل الشركات والمدفوعات</h2>
+        </div>
+
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <input id="search-input" type="text" placeholder="بحث عن شركة..." class="w-full sm:w-60 rounded-md border gold-border bg-[#0a0d14] px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#c5a059]">
+          <button id="export-csv-btn" class="rounded border gold-border bg-[#141824] px-3 py-1.5 text-xs text-gray-300 hover:text-white transition-all whitespace-nowrap">
+            تصدير CSV
+          </button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-right text-xs">
+          <thead class="bg-[#0e121d] text-[#c5a059] font-mono uppercase tracking-wider border-b gold-border">
+            <tr>
+              <th class="p-3.5 sm:px-6">اسم الشركة / الجهة</th>
+              <th class="p-3.5 sm:px-6">المبلغ المستحق (الإيراد)</th>
+              <th class="p-3.5 sm:px-6">التكاليف المباشرة</th>
+              <th class="p-3.5 sm:px-6">صافي الربح</th>
+              <th class="p-3.5 sm:px-6">حالة العقد</th>
+              <th class="p-3.5 sm:px-6">ملاحظات</th>
+              <th class="p-3.5 sm:px-6 text-center">إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="companies-table-body" class="divide-y divide-[#c5a059]/10">
+            <!-- Rendered dynamically -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="empty-state" style="display:none;" class="p-12 text-center text-gray-400">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mx-auto mb-3 opacity-40"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>
+        <p class="font-bold text-sm">لم يتم تسجيل أي شركة حتى الآن</p>
+        <p class="text-xs text-gray-500 mt-1">اضغط على زر "إضافة شركة جديدة" لبدء تسجيل الشركات وحساب الإيرادات والتكاليف.</p>
+      </div>
+    </div>
+
+    <!-- INCOMING CLIENT REQUESTS SECTION -->
+    <div class="card-bg rounded-xl border gold-border p-6 shadow-2xl">
+      <div class="flex items-center justify-between mb-4 border-b gold-border pb-3">
+        <div class="flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <h2 class="text-lg font-bold text-white">طلبات العملاء الواردة من الموقع الرسمي (Inbound RFPs)</h2>
+        </div>
+        <span class="text-xs font-mono text-[#c5a059]" id="inbound-count">0 طلب</span>
+      </div>
+
+      <div id="inbound-requests-container" class="space-y-3">
+        <!-- Rendered dynamically from localStorage / API -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODAL: ADD / EDIT COMPANY -->
+  <div id="company-modal" style="display:none;" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm items-center justify-center p-4">
+    <div class="card-bg rounded-xl border gold-border max-w-lg w-full p-6 text-white relative shadow-2xl">
+      <button id="close-company-modal" class="absolute top-4 left-4 text-gray-400 hover:text-white">✕</button>
+      <h3 id="modal-title" class="text-xl font-bold mb-4 gold-gradient-text">إضافة شركة جديدة</h3>
+
+      <form id="company-form" class="space-y-4">
+        <input type="hidden" id="company-id">
+        <div>
+          <label class="block text-xs font-semibold text-[#c5a059] mb-1">اسم الشركة أو الهيئة *</label>
+          <input id="form-name" type="text" required placeholder="مثال: الهيئة الوطنية الرقمية" class="w-full rounded-md border gold-border bg-[#0a0d14] px-3 py-2 text-sm text-white focus:outline-none focus:border-[#c5a059]">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-[#c5a059] mb-1">المبلغ المستحق (الإيراد) *</label>
+            <input id="form-revenue" type="number" step="0.01" required placeholder="0.00" class="w-full rounded-md border gold-border bg-[#0a0d14] px-3 py-2 text-sm text-white font-mono focus:outline-none focus:border-[#c5a059]">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-[#c5a059] mb-1">التكاليف المباشرة *</label>
+            <input id="form-cost" type="number" step="0.01" required placeholder="0.00" class="w-full rounded-md border gold-border bg-[#0a0d14] px-3 py-2 text-sm text-white font-mono focus:outline-none focus:border-[#c5a059]">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-[#c5a059] mb-1">حالة العقد والخدمة</label>
+          <select id="form-status" class="w-full rounded-md border gold-border bg-[#0a0d14] px-3 py-2 text-sm text-white focus:outline-none focus:border-[#c5a059]">
+            <option value="active">نشط / مستمر (Active)</option>
+            <option value="pending">قيد التفاوض / الاعتماد (Pending)</option>
+            <option value="closed">مكتمل / منتهي (Completed)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-[#c5a059] mb-1">ملاحظات العقد والاشتراطات</label>
+          <textarea id="form-notes" rows="3" placeholder="اكتب أي شروط خاصة، مواعيد سداد، أو نطاق البنية التحتية..." class="w-full rounded-md border gold-border bg-[#0a0d14] px-3 py-2 text-sm text-white focus:outline-none focus:border-[#c5a059]"></textarea>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-3">
+          <button type="button" id="cancel-company-btn" class="rounded border gold-border bg-gray-800 px-4 py-2 text-xs text-gray-300 hover:text-white">إلغاء</button>
+          <button type="submit" class="rounded bg-[#c5a059] px-6 py-2 text-xs font-bold text-black hover:bg-[#e7c77d] transition-all">حفظ البيانات</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CHANGE PASSWORD -->
+  <div id="password-modal" style="display:none;" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm items-center justify-center p-4">
+    <div class="card-bg rounded-xl border gold-border max-w-md w-full p-6 text-white relative shadow-2xl">
+      <button id="close-password-modal" class="absolute top-4 left-4 text-gray-400 hover:text-white">✕</button>
+      <h3 class="text-xl font-bold mb-2 gold-gradient-text">تغيير كلمة المرور الإدارية</h3>
+      <p class="text-xs text-gray-400 mb-4">يمكنك تغيير كلمة السر للمستخدم <strong class="text-white">admin</strong> في أي وقت وبكل سهولة.</p>
+
+      <form id="password-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-[#c5a059] mb-1">كلمة المرور الحالية</label>
+          <input id="pwd-current" type="password" required class="w-full rounded-md border gold-border bg-[#0a0d14] px-3 py-2 text-sm text-white focus:outline-none focus:border-[#c5a059]">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-[#c5a059] mb-1">كلمة المرور الجديدة *</label>
+          <input id="pwd-new" type="password" required class="w-full rounded-md border gold-border bg-[#0a0d14] px-3 py-2 text-sm text-white focus:outline-none focus:border-[#c5a059]">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-[#c5a059] mb-1">تأكيد كلمة المرور الجديدة *</label>
+          <input id="pwd-confirm" type="password" required class="w-full rounded-md border gold-border bg-[#0a0d14] px-3 py-2 text-sm text-white focus:outline-none focus:border-[#c5a059]">
+        </div>
+
+        <div id="pwd-msg" style="display:none;" class="text-xs p-2 rounded"></div>
+
+        <div class="pt-2 flex items-center justify-end gap-3">
+          <button type="submit" class="w-full rounded bg-[#c5a059] px-4 py-2 text-xs font-bold text-black hover:bg-[#e7c77d] transition-all">تحديث كلمة السر</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT CONTROLLER -->
+  <script>
+  (function() {
+    // Authentication Guard
+    const authSession = localStorage.getItem('dme_admin_session');
+    if (!authSession) {
+      window.location.href = '/?auth=required';
+      return;
+    }
+
+    // Default Password Management
+    if (!localStorage.getItem('dme_admin_password')) {
+      localStorage.setItem('dme_admin_password', 'DME-Sec@7492');
+    }
+
+    // Default Companies (Pre-seeded realistically)
+    let companies = JSON.parse(localStorage.getItem('dme_companies') || 'null');
+    if (!companies) {
+      companies = [
+        {
+          id: 'cmp-1',
+          name: 'الهيئة السعودية للأنظمة السيادية (Sovereign Authority)',
+          revenue: 145000,
+          cost: 32000,
+          status: 'active',
+          notes: 'عقد منصة إدارة العلاقات وتتبع التراخيص المعزولة مع حزمة الأمان السحابي.',
+          date: '2026-03-15'
+        },
+        {
+          id: 'cmp-2',
+          name: 'شركة الخليج للبنية التحتية والبيانات (Gulf Enterprise)',
+          revenue: 88000,
+          cost: 19500,
+          status: 'active',
+          notes: 'بوابة إدارية مغلقة ونظام سير عمل وزاري مع تدقيق شامل.',
+          date: '2026-05-01'
+        },
+        {
+          id: 'cmp-3',
+          name: 'مجموعة الكويت للأنظمة المعزولة (Air-Gapped Hub)',
+          revenue: 110000,
+          cost: 24000,
+          status: 'pending',
+          notes: 'قيد الاعتماد النهائي للتركيب على بنية تحتية محلية مغلقة.',
+          date: '2026-08-10'
+        }
+      ];
+      localStorage.setItem('dme_companies', JSON.stringify(companies));
+    }
+
+    let currency = '$';
+
+    function saveCompanies() {
+      localStorage.setItem('dme_companies', JSON.stringify(companies));
+      render();
+    }
+
+    function formatNumber(num) {
+      return Number(num).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+    }
+
+    function render() {
+      const search = (document.getElementById('search-input').value || '').toLowerCase();
+      const filtered = companies.filter(c => c.name.toLowerCase().includes(search) || (c.notes || '').toLowerCase().includes(search));
+
+      const tbody = document.getElementById('companies-table-body');
+      tbody.innerHTML = '';
+
+      let totalRev = 0;
+      let totalCost = 0;
+      let activeCount = 0;
+
+      companies.forEach(c => {
+        totalRev += Number(c.revenue || 0);
+        totalCost += Number(c.cost || 0);
+        if (c.status === 'active') activeCount++;
+      });
+
+      const netProfit = totalRev - totalCost;
+      const profitMargin = totalRev > 0 ? ((netProfit / totalRev) * 100).toFixed(1) : 0;
+
+      // Update KPI Cards
+      document.getElementById('stat-total-companies').textContent = companies.length;
+      document.getElementById('stat-active-companies').textContent = activeCount;
+      document.getElementById('stat-total-revenue').textContent = currency + ' ' + formatNumber(totalRev);
+      document.getElementById('stat-total-costs').textContent = currency + ' ' + formatNumber(totalCost);
+      document.getElementById('stat-net-profit').textContent = currency + ' ' + formatNumber(netProfit);
+      document.getElementById('stat-profit-margin').textContent = profitMargin + '%';
+
+      if (filtered.length === 0) {
+        document.getElementById('empty-state').style.display = 'block';
+      } else {
+        document.getElementById('empty-state').style.display = 'none';
+
+        filtered.forEach(c => {
+          const rev = Number(c.revenue || 0);
+          const cost = Number(c.cost || 0);
+          const profit = rev - cost;
+
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-[#151a26] transition-colors';
+
+          let statusBadge = '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] border border-emerald-500/30 bg-emerald-950/40 text-emerald-400">نشط</span>';
+          if (c.status === 'pending') {
+            statusBadge = '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] border border-amber-500/30 bg-amber-950/40 text-amber-300">قيد المراجعة</span>';
+          } else if (c.status === 'closed') {
+            statusBadge = '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] border border-gray-500/30 bg-gray-900/60 text-gray-400">منتهي</span>';
+          }
+
+          tr.innerHTML = `
+            <td class="p-3.5 sm:px-6 font-bold text-white">${c.name}</td>
+            <td class="p-3.5 sm:px-6 font-mono text-[#f5e3b5] font-semibold">${currency} ${formatNumber(rev)}</td>
+            <td class="p-3.5 sm:px-6 font-mono text-red-300">${currency} ${formatNumber(cost)}</td>
+            <td class="p-3.5 sm:px-6 font-mono font-bold text-emerald-400">${currency} ${formatNumber(profit)}</td>
+            <td class="p-3.5 sm:px-6">${statusBadge}</td>
+            <td class="p-3.5 sm:px-6 text-gray-400 max-w-xs truncate" title="${c.notes || ''}">${c.notes || '—'}</td>
+            <td class="p-3.5 sm:px-6 text-center">
+              <div class="inline-flex items-center gap-1.5">
+                <button onclick="window.editCompany('${c.id}')" class="p-1 rounded text-gray-400 hover:text-white hover:bg-gray-800" title="تعديل">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+                </button>
+                <button onclick="window.deleteCompany('${c.id}')" class="p-1 rounded text-red-400 hover:text-red-300 hover:bg-red-950/40" title="حذف">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                </button>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      // Render Inbound Requests
+      const reqList = JSON.parse(localStorage.getItem('dme_requests') || '[]');
+      document.getElementById('inbound-count').textContent = reqList.length + ' طلب';
+      const reqContainer = document.getElementById('inbound-requests-container');
+      reqContainer.innerHTML = '';
+      if (reqList.length === 0) {
+        reqContainer.innerHTML = '<p class="text-xs text-gray-500 py-3 text-center">لا توجد طلبات جديدة واردة عبر الموقع حالياً.</p>';
+      } else {
+        reqList.slice().reverse().forEach(r => {
+          const div = document.createElement('div');
+          div.className = 'p-3 rounded-lg border gold-border bg-[#0a0d14] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs';
+          div.innerHTML = `
+            <div>
+              <span class="font-bold text-white text-sm">${r.organization || 'جهة مجهولة'}</span>
+              <span class="text-gray-400 text-[11px] block mt-0.5">المسؤول: ${r.name || '—'} · البريد: <a href="mailto:${r.email}" class="text-[#c5a059] underline">${r.email || '—'}</a></span>
+              <span class="text-gray-400 text-[11px] block mt-0.5 font-mono">النطاق: ${r.projectType || 'عام'} · البيئة: ${r.deploymentTarget || 'مخصصة'}</span>
+              ${r.details ? `<p class="text-gray-300 text-[11px] mt-1 bg-black/40 p-2 rounded font-sans">${r.details}</p>` : ''}
+            </div>
+            <div class="text-left font-mono">
+              <span class="text-[#c5a059] block font-bold">${r.reqId || 'DME-REQ'}</span>
+              <span class="text-gray-500 text-[10px] block">${new Date(r.date || Date.now()).toLocaleDateString('ar-EG')}</span>
+            </div>
+          `;
+          reqContainer.appendChild(div);
+        });
+      }
+    }
+
+    // Currency Switcher
+    document.querySelectorAll('.curr-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.curr-btn').forEach(b => {
+          b.className = 'curr-btn px-2.5 py-1 rounded text-gray-400 hover:text-white';
+        });
+        this.className = 'curr-btn px-2.5 py-1 rounded bg-[#c5a059] text-black font-bold';
+        currency = this.dataset.curr;
+        render();
+      });
+    });
+
+    // Search
+    document.getElementById('search-input').addEventListener('input', render);
+
+    // Modal Add / Edit
+    const companyModal = document.getElementById('company-modal');
+    document.getElementById('add-company-btn').addEventListener('click', () => {
+      document.getElementById('modal-title').textContent = 'إضافة شركة جديدة';
+      document.getElementById('company-form').reset();
+      document.getElementById('company-id').value = '';
+      companyModal.style.display = 'flex';
+    });
+
+    document.getElementById('close-company-modal').addEventListener('click', () => {
+      companyModal.style.display = 'none';
+    });
+    document.getElementById('cancel-company-btn').addEventListener('click', () => {
+      companyModal.style.display = 'none';
+    });
+
+    document.getElementById('company-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const id = document.getElementById('company-id').value || ('cmp-' + Date.now());
+      const name = document.getElementById('form-name').value.trim();
+      const revenue = parseFloat(document.getElementById('form-revenue').value) || 0;
+      const cost = parseFloat(document.getElementById('form-cost').value) || 0;
+      const status = document.getElementById('form-status').value;
+      const notes = document.getElementById('form-notes').value.trim();
+
+      const existingIndex = companies.findIndex(c => c.id === id);
+      if (existingIndex !== -1) {
+        companies[existingIndex] = { ...companies[existingIndex], name, revenue, cost, status, notes };
+      } else {
+        companies.push({ id, name, revenue, cost, status, notes, date: new Date().toISOString() });
+      }
+
+      companyModal.style.display = 'none';
+      saveCompanies();
+    });
+
+    window.editCompany = function(id) {
+      const c = companies.find(item => item.id === id);
+      if (!c) return;
+      document.getElementById('modal-title').textContent = 'تعديل بيانات الشركة';
+      document.getElementById('company-id').value = c.id;
+      document.getElementById('form-name').value = c.name;
+      document.getElementById('form-revenue').value = c.revenue;
+      document.getElementById('form-cost').value = c.cost;
+      document.getElementById('form-status').value = c.status;
+      document.getElementById('form-notes').value = c.notes || '';
+      companyModal.style.display = 'flex';
+    };
+
+    window.deleteCompany = function(id) {
+      if (confirm('هل أنت متأكد من رغبتك في حذف هذه الشركة من السجلات؟')) {
+        companies = companies.filter(c => c.id !== id);
+        saveCompanies();
+      }
+    };
+
+    // CSV Export
+    document.getElementById('export-csv-btn').addEventListener('click', () => {
+      let csv = 'اسم الشركة,الإيرادات,التكاليف,صافي الربح,الحالة,ملاحظات\n';
+      companies.forEach(c => {
+        const profit = c.revenue - c.cost;
+        csv += `"${c.name}",${c.revenue},${c.cost},${profit},"${c.status}","${(c.notes||'').replace(/"/g, '""')}"\n`;
+      });
+      const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `data-middleeast-companies-${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+    });
+
+    // Password Change Modal
+    const pwdModal = document.getElementById('password-modal');
+    document.getElementById('open-password-btn').addEventListener('click', () => {
+      document.getElementById('password-form').reset();
+      document.getElementById('pwd-msg').style.display = 'none';
+      pwdModal.style.display = 'flex';
+    });
+    document.getElementById('close-password-modal').addEventListener('click', () => {
+      pwdModal.style.display = 'none';
+    });
+
+    document.getElementById('password-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const current = document.getElementById('pwd-current').value;
+      const newPwd = document.getElementById('pwd-new').value;
+      const confirmPwd = document.getElementById('pwd-confirm').value;
+      const msg = document.getElementById('pwd-msg');
+
+      const savedPwd = localStorage.getItem('dme_admin_password') || 'DME-Sec@7492';
+      if (current !== savedPwd) {
+        msg.className = 'text-xs p-2.5 rounded bg-red-950/70 border border-red-500/50 text-red-200';
+        msg.textContent = 'كلمة المرور الحالية غير صحيحة!';
+        msg.style.display = 'block';
+        return;
+      }
+      if (newPwd.length < 6) {
+        msg.className = 'text-xs p-2.5 rounded bg-red-950/70 border border-red-500/50 text-red-200';
+        msg.textContent = 'يجب أن لا تقل كلمة المرور الجديدة عن 6 خانات.';
+        msg.style.display = 'block';
+        return;
+      }
+      if (newPwd !== confirmPwd) {
+        msg.className = 'text-xs p-2.5 rounded bg-red-950/70 border border-red-500/50 text-red-200';
+        msg.textContent = 'كلمة المرور الجديدة غير متطابقة مع التأكيد.';
+        msg.style.display = 'block';
+        return;
+      }
+
+      localStorage.setItem('dme_admin_password', newPwd);
+      msg.className = 'text-xs p-2.5 rounded bg-emerald-950/70 border border-emerald-500/50 text-emerald-200';
+      msg.textContent = 'تم تحديث كلمة المرور بنجاح! يمكنك استخدامها لتسجيل الدخول لاحقاً.';
+      msg.style.display = 'block';
+      setTimeout(() => { pwdModal.style.display = 'none'; }, 1200);
+    });
+
+    // Logout
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      localStorage.removeItem('dme_admin_session');
+      window.location.href = '/';
+    });
+
+    render();
+  })();
+  </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"fa02e0f26ad24a92ba6914df286a10d8","r":1,"spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>
